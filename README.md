@@ -1,4 +1,4 @@
-# hgrv_2019paper
+# hgrv_method
 The datasets, algorithms, and code associated with Holzer et al. (in prep).
 
 There are 5 Jupyter notebooks with Python 3 code that are designed to give interested readers a more hands on understanding of each portion of the paper. Algorithm 1 described in Section 2 of the paper is programmed in as a function in the file "abfeature_functions.py", and the reader can practice using it on the median spectrum for 51 Pegasi in the notebook "Find Absorption Features.ipynb".
