@@ -1,0 +1,11 @@
+This folder contains all code and data used for applying the HGRV method to spectra from 51 Pegasi (HD 217014) collected in 2019 by EXPRES. The general process of applying the HGRV method has five main sequential steps: (1) for each observed spectrum stitch the orders together and mask out (or at least correct for) tellurics, (2) estimate the template spectrum, (3) apply the Absorption Feature Finder algorithm to the estimated template, (4) fit Gaussians to each detected absorption feature, (5) apply weighted linear regression to obtain radial velocity estimates and uncertainties for each observed spectrum. Each of these steps is described more below.
+
+(1) The Jupyter notebook "Tellurics and Order Stitching.ipynb" performs this first step. The code will read in all .fits files and output the stitched, telluric-corrected spectra as .csv files that are used in later steps.
+
+(2) The R script "estimate_template.R" performs the template estimation that involves stacking all spectra and applying local quadratic regression. This script is written to parallelize the process. The result for applying this to the 51 Pegasi spectra is given in the file "217014smoothtemp.csv".
+
+(3) The Jupyter notebook "Find Absorption Features.ipynb" performs this third step on the estimated template for 51 Pegasi. The output is given in the file "Features.csv".
+
+(4) The process of fitting Gaussians to each detected absorption feature is described in detail in the Jupyter notebook "Gaussian Fit Parameters.ipynb". The results of all features that were well fitted by either one or two Gaussians at the end of this process are given in the file "GoodFeatures.csv".
+
+(5) The final step of estimating the radial velocity with the HGRV method is performed in the Jupyter notebook "RV Regression.ipynb". The estimated radial velocities given by the cross-correlation function approach, as provided by the EXPRES team, are given in the file "ccf_rvs.txt". Initially, we have 55 observed spectra from 51 Pegasi. But only 53 of these had a corresponding estimate from the cross-correlation function approach. The corresponding 53 estimates from the HGRV approach are provided in the file "Derived_RVs.csv".
