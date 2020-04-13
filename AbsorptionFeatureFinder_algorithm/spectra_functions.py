@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.interpolate as interpolate
+import scipy.stats as stat
 
 def lowerSNR(spec, snr):
     """

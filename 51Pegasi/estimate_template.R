@@ -66,15 +66,19 @@ smoothspec = function(bd){
   amin = length(which(wvl[keep] <= wvl[keep][1] + 0.017))/length(keep)
   amax = length(which(wvl[keep] <= wvl[keep][1] + 0.05))/length(keep)
   alphas = seq(amin, amax, length.out = 20)
-  gcvs = gcvplot(flx[keep] ~ wvl[keep],
+  gcvs = tryCatch(gcvplot(flx[keep] ~ wvl[keep],
                  deg=2, alpha=alphas, 
-                 kern='gauss')
+                 kern='gauss'), error = function(e){list(alpha = alphas, values = c(1,1,0,rep(1,length(alphas)-3)))})
   bestalpha = gcvs$alpha[which.min(gcvs$values)]
   #use the best bandwidth and estimate template
-  mdl = locfit(flx[keep] ~ wvl[keep], deg=2, 
-                      alpha=bestalpha, kern='gauss')
-  
-  return(list(predwvl, predict(mdl, predwvl)))
+  mdl = tryCatch(locfit(flx[keep] ~ wvl[keep], deg=2, 
+                      alpha=bestalpha, kern='gauss'), error = function(e){rep(NA,1)})
+
+  if(class(mdl)=="logical"){
+    return(list(predwvl, rep(NA, length(predwvl))))
+  }else{
+    return(list(predwvl, predict(mdl, predwvl)))
+  }
 }
 
 #Parallelize the smoothing
