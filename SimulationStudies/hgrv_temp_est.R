@@ -1,9 +1,7 @@
 library(locfit)
 library(parallel)
-
 temp = read.csv("smoothednso_expres.csv")
 r1 = which((temp$Wavelength > 5240.8) & (temp$Wavelength < 5245.8))
-
 
 lowerSNR = function(flx, sn){
   orig_mean = mean(flx)
@@ -22,9 +20,13 @@ tempmse = function(cnt, snr){
   amax = length(which(wvl <= wvl[1] + 0.15))/length(wvl)
   alphas = seq(amin, amax, length.out = 20)
   gcvs = gcvplot(flx ~ wvl, deg=2, alpha=alphas, kern='gauss')
+  #plot(gcvs$alpha, gcvs$values)
   bestalpha = gcvs$alpha[which.min(gcvs$values)]
   mdl = locfit(flx ~ wvl, deg=2, alpha=bestalpha, kern='gauss')
   
+  #plot(temp$Wavelength[r1], temp$Flux[r1], type = 'l')
+  #lines(temp$Wavelength[r1], predict(mdl, temp$Wavelength[r1]), lty=2, col=2)
+  #plot(temp$Wavelength[r1], temp$Flux[r1] - predict(mdl, temp$Wavelength[r1]))
   rms = sqrt(mean((temp$Flux[r1] - predict(mdl, temp$Wavelength[r1]))^2))
   return(rms)
 }
