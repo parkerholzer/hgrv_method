@@ -116,3 +116,9 @@ def findabsorptionfeatures(wvl, flux, pix_range = 7, gamma = 0.01, alpha = 0.05,
         if maxfluxs[i]-minfluxs[i] >= minlinedepth:
             keep.append(i)
     return np.array(wvbounds)[keep], np.array(minwvs)[keep], np.array(minfluxs)[keep], np.array(maxfluxs)[keep]
+
+def doppshift(wvl, flx, rv):
+    #Function that takes a spectrum and doppler-shifts it by a given radial velocity. It returns the flux of the shifted spectrum that is interpolated to the original wavelengths with natural cubic splines.
+    dopp_fact = 1 + rv/299792458
+    ds_spec = interpolate.interp1d(dopp_fact*wvl, flx, kind='cubic', fill_value='extrapolate')
+    return(ds_spec(wvl))
